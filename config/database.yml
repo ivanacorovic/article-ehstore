@@ -1,13 +1,12 @@
 common: &common
   host: localhost
-  port: 5433
   adapter: postgresql
   user: ehstore
-  password:
+  password: secret
 
 development:
   <<: *common
-  database: ehstore_dev
+  database: ehstore_development
 
 test:
   <<: *common

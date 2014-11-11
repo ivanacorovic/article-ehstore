@@ -20,7 +20,7 @@ class Product < ActiveRecord::Base
             field => term
           }
         },
-        facets: {
+        aggs: {
           facet => {
             terms: {
               field: field
@@ -29,7 +29,7 @@ class Product < ActiveRecord::Base
         }
       }
       response = Product.search(es_params)
-      response.response["facets"][facet]["terms"].map{ |f| f['term']}
+      response.response["aggregations"][facet]["buckets"].map{ |f| f['key']}
     end
 
     def search
@@ -45,7 +45,7 @@ class Product < ActiveRecord::Base
     def property_keys
       @property_keys ||=
         begin
-          query = 'select distinct k from (select skeys(properties) as k from products) as dt'
+          query = 'select distinct k from (select json_object_keys(properties) as k from products) as dt'
           results = ActiveRecord::Base.connection.execute(query)
           results.each_with_object([]) { |rows, columns| columns << rows['k'] }
         end
