@@ -48,3 +48,21 @@ Then in terminal, run:
 
     bundle exec rake environment elasticsearch:import:model CLASS=Product
 
+### Example in Sense
+
+    GET products/_search
+    {
+      "size": 0,
+      "query": {
+        "prefix": {
+          "properties.color": "p"
+        }
+      },
+      "facets": {
+        "color": {
+          "terms": {
+            "field": "properties.color"
+          }
+        }
+      }
+    }
